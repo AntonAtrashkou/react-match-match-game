@@ -3,23 +3,24 @@ import React, { Component } from 'react';
 import './Card.scss';
 
 class Card extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isFlip: false,
-    };
+
+  componentDidMount() {
+    console.log(123);
   }
 
   handleClick = () => {
     const { side, onFlip, id } = this.props;
     onFlip(side, id);
-    const { isFlip } = this.state;
-    this.setState({ isFlip: !isFlip });
+    // const { isFlip } = this.state;
+    // this.setState({ isFlip: !isFlip }, () => {
+    //   onFlip(side, id);
+    // });
   }
 
   render() {
-    const { side, shirt, id } = this.props;
-    const { isFlip } = this.state;
+    const { side, shirt, isFlip } = this.props;
+    // const { isFlip } = this.state;
+    console.log(isFlip);
 
     return (
       <div className="card-container">
@@ -28,7 +29,7 @@ class Card extends Component {
           onClick={this.handleClick}
           role="presentation"
         >
-          <div id={id} className="side" style={{ backgroundImage: `url('${side}')` }} />
+          <div className="side" style={{ backgroundImage: `url('${side}')` }} />
           <div className="shirt" style={{ backgroundImage: `url('${shirt}')` }} />
         </div>
       </div>

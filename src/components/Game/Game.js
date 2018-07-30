@@ -24,12 +24,14 @@ class Game extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      cardsPair: [],
-    };
+    this.rowKeys = ['key1', 'key2', 'key3'];
     this.cardsSideImages = [
       card1, card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12,
     ];
+    this.state = {
+      cardPair: [],
+      cardsRows: this.createCardsGame(),
+    };
   }
 
   shuffleArray = (a) => {
@@ -42,16 +44,22 @@ class Game extends Component {
   }
 
   handleFlip = (imgUrl, id) => {
-    const { cardsPair } = this.state;
-    const cardInfo = {
+    const { cardPair } = this.state;
+    const cardInfo = [{
       cardId: id,
       cardUrl: imgUrl,
-    };
-    this.setState({ cardsPair: [...cardsPair, cardInfo] });
+    }];
+    if (cardPair.length < 2) {
+      let arr = [];
+      arr = arr.concat(cardPair);
+      arr = arr.concat(cardInfo);
+      this.setState({ cardPair: arr });
+    }
+    // this.checkPairs();
   }
 
   createCardsGame = () => {
-    const { currentDifficulty, currentShirtUrl } = this.props;
+    const { currentDifficulty } = this.props;
     const column = currentDifficulty[0];
     const row = currentDifficulty[1];
     let arr = this.cardsSideImages.slice(0, (column * row) / 2);
@@ -61,38 +69,49 @@ class Game extends Component {
     for (let i = 0; i < row; i++) {
       rows.push(arr.slice(i * column, column * (i + 1)));
     }
-    return rows.map((cardImgs, cardRow) => (
-      <div className="cardsRow" key={Math.random()}>
-        {cardImgs.map((cardImg, cardPlace) => (
-          <Card
-            id={`${cardRow}${cardPlace}`}
-            key={Math.random()}
-            side={cardImg}
-            shirt={currentShirtUrl}
-            onFlip={this.handleFlip}
-          />))
-        }
-      </div>
-    ));
+    return rows;
   }
 
   // checkPairs() {
-  //   const { cardsPair } = this.state;
-  //   if (cardsPair.length === 1) {
-  //     if (cardsPair[0].id === cardsPair[1].id) {
-  //       this.setState({ cardsPair: [cardsPair[0]] });
-
+  //   if (this.cardPair.length === 2) {
+  //     if (this.cardPair[0].cardUrl === this.cardPair[1].cardUrl
+  //       && this.cardPair[0].id !== this.cardPair[1].id) {
+  //       return true;
   //     }
-  //   }else if(cardsPair[0].cardUrl === cardsPair[1].cardUrl) {
-
   //   }
+  //   return false;
   // }
+
+  checkFlip = (cardPair, cardImg) => {
+    for (let i = 0; i < cardPair.length; i++) {
+      if (cardPair[i].cardUrl === cardImg && asdfasdfasdfasdf) {
+        return true;
+      }
+    }
+    return false;
+  }
 
 
   render() {
+    const { currentShirtUrl } = this.props;
+    const { cardsRows, cardPair } = this.state;
     return (
       <div>
-        {this.createCardsGame()}
+        {cardsRows.map((cardImgs, cardRow) => (
+          <div className="cardsRow" key={this.rowKeys[cardRow]}>
+            {cardImgs.map((cardImg, cardPlace) => (
+              <Card
+                id={`${cardRow}${cardPlace}`}
+                key={`${this.rowKeys[cardRow] + cardRow + cardPlace}`}
+                side={cardImg}
+                shirt={currentShirtUrl}
+                isFlip={this.checkFlip(cardPair, cardImg)}
+                onFlip={this.handleFlip}
+              />))
+            }
+          </div>
+        ))}
+
       </div>
     );
   }
