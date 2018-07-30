@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import './Menu.scss';
 
 import Shirt from './Shirt';
 import shirt1 from '../../assets/img/shirts/back-side1.png';
@@ -11,7 +12,13 @@ import shirt3 from '../../assets/img/shirts/back-side3.png';
 class Menu extends Component {
   static propTypes = {
     setDifficulty: PropTypes.func,
+    setShirt: PropTypes.func,
     currentDifficulty: PropTypes.string,
+  }
+
+  componentDidMount() {
+    const { setShirt } = this.props;
+    setShirt(shirt1);
   }
 
   handleSetDiff = (diff) => {

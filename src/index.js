@@ -13,9 +13,7 @@ import reducers from './reducers/index';
 
 import './styles/index.scss';
 
-const history = createHistory({
-  basename: process.env.BASE_HREF,
-});
+const history = createHistory();
 const logger = createLogger({
   collapsed: true,
 });

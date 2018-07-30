@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 import Game from './Game';
 
 const mapStateToProps = state => ({
-  currentDifficulty: state.menuReducer.difficulty,
+  currentDifficulty: Object.values(state.menuReducer.difficulty)[0],
   currentShirtUrl: state.menuReducer.shirt,
 });
 
