@@ -45,15 +45,17 @@ class Game extends Component {
 
   handleFlip = (imgUrl, id) => {
     const { cardPair } = this.state;
-    const cardInfo = [{
-      cardId: id,
-      cardUrl: imgUrl,
-    }];
-    if (cardPair.length < 2) {
-      let arr = [];
-      arr = arr.concat(cardPair);
-      arr = arr.concat(cardInfo);
-      this.setState({ cardPair: arr });
+    if (!cardPair[0] || cardPair[0].cardId !== id) {
+      const cardInfo = [{
+        cardId: id,
+        cardUrl: imgUrl,
+      }];
+      if (cardPair.length < 2) {
+        let arr = [];
+        arr = arr.concat(cardPair);
+        arr = arr.concat(cardInfo);
+        this.setState({ cardPair: arr });
+      }
     }
     // this.checkPairs();
   }
@@ -73,18 +75,12 @@ class Game extends Component {
   }
 
   // checkPairs() {
-  //   if (this.cardPair.length === 2) {
-  //     if (this.cardPair[0].cardUrl === this.cardPair[1].cardUrl
-  //       && this.cardPair[0].id !== this.cardPair[1].id) {
-  //       return true;
-  //     }
-  //   }
-  //   return false;
+
   // }
 
-  checkFlip = (cardPair, cardImg) => {
+  checkFlip = (cardPair, cardImg, cardId) => {
     for (let i = 0; i < cardPair.length; i++) {
-      if (cardPair[i].cardUrl === cardImg && asdfasdfasdfasdf) {
+      if (cardPair[i].cardUrl === cardImg && cardPair[i].cardId === cardId) {
         return true;
       }
     }
@@ -105,8 +101,9 @@ class Game extends Component {
                 key={`${this.rowKeys[cardRow] + cardRow + cardPlace}`}
                 side={cardImg}
                 shirt={currentShirtUrl}
-                isFlip={this.checkFlip(cardPair, cardImg)}
+                isFlip={this.checkFlip(cardPair, cardImg, `${cardRow}${cardPlace}`)}
                 onFlip={this.handleFlip}
+                // condition={this.checkPairs}
               />))
             }
           </div>
