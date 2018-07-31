@@ -46,18 +46,19 @@ class Game extends Component {
   handleFlip = (imgUrl, id) => {
     const { cardPair } = this.state;
     if (!cardPair[0] || cardPair[0].cardId !== id) {
-      const cardInfo = [{
+      const cardInfo = {
         cardId: id,
         cardUrl: imgUrl,
-      }];
+      };
       if (cardPair.length < 2) {
-        let arr = [];
-        arr = arr.concat(cardPair);
-        arr = arr.concat(cardInfo);
-        this.setState({ cardPair: arr });
+        // let arr = [];
+        // arr = arr.concat(cardPair);
+        // arr = arr.concat(cardInfo);
+        // this.setState({ cardPair: arr });
+        this.setState({ cardPair: [...cardPair, cardInfo] });
       }
+      // this.checkPairs(cardPair);
     }
-    // this.checkPairs();
   }
 
   createCardsGame = () => {
@@ -74,43 +75,49 @@ class Game extends Component {
     return rows;
   }
 
-  // checkPairs() {
-
-  // }
-
-  checkFlip = (cardPair, cardImg, cardId) => {
-    for (let i = 0; i < cardPair.length; i++) {
-      if (cardPair[i].cardUrl === cardImg && cardPair[i].cardId === cardId) {
+  checkPairs = (cardPair, cardImg ) => {
+    if (cardPair.length === 2) {
+      if (cardPair[0].cardUrl === cardPair[1].cardUrl && cardPair[0].cardUrl === cardImg) {
         return true;
       }
     }
     return false;
   }
 
+  checkFlip = (cardPair, cardImg, cardId) => {
+    for (let i = 0; i < cardPair.length; i++) {
+      if (cardPair[i].cardUrl === cardImg && cardPair[i].cardId === cardId) {
+        // this.setState({ cardPair: [] });
+        return true;
+      }
+    }
+    return false;
+  }
 
   render() {
     const { currentShirtUrl } = this.props;
     const { cardsRows, cardPair } = this.state;
-    return (
-      <div>
-        {cardsRows.map((cardImgs, cardRow) => (
-          <div className="cardsRow" key={this.rowKeys[cardRow]}>
-            {cardImgs.map((cardImg, cardPlace) => (
-              <Card
-                id={`${cardRow}${cardPlace}`}
-                key={`${this.rowKeys[cardRow] + cardRow + cardPlace}`}
-                side={cardImg}
-                shirt={currentShirtUrl}
-                isFlip={this.checkFlip(cardPair, cardImg, `${cardRow}${cardPlace}`)}
-                onFlip={this.handleFlip}
-                // condition={this.checkPairs}
-              />))
-            }
-          </div>
-        ))}
-
-      </div>
-    );
+    // if (cardsLeft) {
+      return (
+        <div>
+          {cardsRows.map((cardImgs, cardRow) => (
+            <div className="cardsRow" key={this.rowKeys[cardRow]}>
+              {cardImgs.map((cardImg, cardPlace) => (
+                <Card
+                  id={`${cardRow}${cardPlace}`}
+                  key={`${this.rowKeys[cardRow] + cardRow + cardPlace}`}
+                  side={cardImg}
+                  shirt={currentShirtUrl}
+                  isFlip={this.checkFlip(cardPair, cardImg, `${cardRow}${cardPlace}`)}
+                  onFlip={this.handleFlip}
+                  condition={this.checkPairs(cardPair, cardImg)}
+                />))
+              }
+            </div>
+          ))}
+        </div>
+      );
+    // }
   }
 }
 

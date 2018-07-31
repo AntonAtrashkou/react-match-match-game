@@ -4,10 +4,6 @@ import './Card.scss';
 
 class Card extends Component {
 
-  componentDidMount() {
-    console.log(123);
-  }
-
   handleClick = () => {
     const { side, onFlip, id } = this.props;
     onFlip(side, id);
@@ -18,14 +14,17 @@ class Card extends Component {
   }
 
   render() {
-    const { side, shirt, isFlip } = this.props;
+    const { side, shirt, isFlip, condition } = this.props;
+
     // const { isFlip } = this.state;
+
     console.log(isFlip);
+    console.log(condition);
 
     return (
       <div className="card-container">
         <div
-          className={`card ${isFlip ? 'flip' : ''}`}
+          className={`card ${isFlip ? 'flip' : ''} ${condition ? 'none' : ''}`}
           onClick={this.handleClick}
           role="presentation"
         >
