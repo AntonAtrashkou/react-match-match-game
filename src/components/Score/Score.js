@@ -1,39 +1,47 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import './Score.scss';
+
 class Score extends Component {
   static propTypes = {
     // saveUser: PropTypes.func,
     // history: PropTypes.object,
   }
 
-  componentWillMount() {
+  componentDidMount() {
+    const { getScore } = this.props;
+    getScore();
+  }
 
+  scoreList(scoreList) {
+    return(
+      <ol>
+      {
+        scoreList.map(item => (
+          <li key={item._id}>
+            <div>
+              <div>{item.username}</div>
+              <div>{item.score}</div>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+    )
   }
 
   render() {
+    const { score } = this.props;
+    let scoreListHTML;
+    if (score.result) {
+      console.log(score);
+      const scoreItems = score.result.filter(item => item.score <= 100).sort((a, b) => (b.score - a.score)).slice(0, 10);
+      scoreListHTML = this.scoreList(scoreItems);
+    }
     return (
       <div className="score">
-        <h2>
-          Top 10 players
-        </h2>
-        <table>
-          <thead>
-            <tr>
-              <th>
-                Name
-              </th>
-              <th>
-                Time
-              </th>
-              <th>
-                Difficulty
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
+        {scoreListHTML}
       </div>
 
     );

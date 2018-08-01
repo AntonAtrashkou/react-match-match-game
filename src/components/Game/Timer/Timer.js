@@ -25,7 +25,7 @@ class Timer extends Component {
         this.stopTimer();
       }
       this.setState({ time: Date.now() - start });
-    }, 1000);
+    }, 500);
   }
 
   stopTimer() {

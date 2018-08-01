@@ -24,6 +24,7 @@ class Game extends Component {
     currentShirtUrl: PropTypes.string,
     setTime: PropTypes.func,
     userName: PropTypes.string,
+    userEmail: PropTypes.string,
   }
 
   constructor(props) {
@@ -42,6 +43,7 @@ class Game extends Component {
 
   setTime = (gameTime) => {
     const { setTime } = this.props;
+    this.setState({ time: gameTime });
     setTime(gameTime);
   }
 
@@ -99,7 +101,7 @@ class Game extends Component {
                   }
                 });
               });
-              this.setState({ gameStatus: gameStatus });
+              this.setState({ gameStatus });
             },
           );
         }, 1000);
@@ -119,14 +121,12 @@ class Game extends Component {
   }
 
   render() {
-    const { currentShirtUrl, userName } = this.props;
+    const { currentShirtUrl, userName, userEmail, postScore } = this.props;
     const { cardsRows, cardPair, gameStatus, time } = this.state;
-    // время не прокидывается
-    console.log(time);
     return (
       <div>
         <Timer gameStatus={gameStatus} setPlayerTime={this.setTime} />
-        <ModalWindow gameStatus={gameStatus} gameTime={time} userName={userName} />
+        <ModalWindow gameStatus={gameStatus} gameTime={time} userName={userName} userEmail={userEmail} postScore={postScore} />
         {cardsRows.map((cardImgs, cardRow) => (
           <div className="cardsRow" key={this.rowKeys[cardRow]}>
             {cardImgs.map((cardImg, cardPlace) => (

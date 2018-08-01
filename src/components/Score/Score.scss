@@ -1,5 +1,5 @@
 .score {
-  display: none;
+  display: flex;
   flex-direction: column;
   align-items: center;
   width: 500px;
@@ -8,14 +8,4 @@
   background: rgb(184, 74, 74);
 }
 
-.score table{
-  border: solid black;
-}
 
-.score th{
-  border: solid black;
-}
-
-.score td{
-  border: solid black;
-}

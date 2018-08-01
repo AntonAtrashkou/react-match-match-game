@@ -4,9 +4,18 @@ import { Link } from 'react-router-dom';
 import './ModalWindow.scss';
 
 class ModalWindow extends Component {
-  render() {
-    const { gameStatus, gameTime, userName } = this.props;
 
+
+  render() {
+    const { gameStatus, gameTime, userName, userEmail, postScore } = this.props;
+    if (gameTime && userName && gameStatus && userEmail) {
+      const params = {
+        username: userName,
+        email: userEmail,
+        score: gameTime,
+      };
+      postScore(params);
+    }
     return (
       <div>
         {gameStatus && (
