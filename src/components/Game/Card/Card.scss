@@ -1,10 +1,11 @@
 .card-container {
-  cursor: pointer;
+
   height: 150px;
   // perspective: 600;
   position: relative;
   width: 150px;
   .card {
+    cursor: pointer;
     height: 100%;
     position: absolute;
     transform-style: preserve-3d;

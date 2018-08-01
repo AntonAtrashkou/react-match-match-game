@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './Game.scss';
 import Card from './Card';
+import Timer from './Timer/Timer';
+import ModalWindow from './ModalWindow/ModalWindow';
 
 import card1 from '../../assets/img/cards/01.png';
 import card2 from '../../assets/img/cards/02.png';
@@ -20,6 +22,8 @@ class Game extends Component {
   static propTypes = {
     currentDifficulty: PropTypes.array,
     currentShirtUrl: PropTypes.string,
+    setTime: PropTypes.func,
+    userName: PropTypes.string,
   }
 
   constructor(props) {
@@ -31,7 +35,14 @@ class Game extends Component {
     this.state = {
       cardPair: [],
       cardsRows: this.createCardsGame(),
+      gameStatus: false,
+      time: '',
     };
+  }
+
+  setTime = (gameTime) => {
+    const { setTime } = this.props;
+    setTime(gameTime);
   }
 
   shuffleArray = (a) => {
@@ -45,19 +56,15 @@ class Game extends Component {
 
   handleFlip = (imgUrl, id) => {
     const { cardPair } = this.state;
-    if (!cardPair[0] || cardPair[0].cardId !== id) {
+    if (cardPair.length < 2) {
       const cardInfo = {
         cardId: id,
         cardUrl: imgUrl,
       };
-      if (cardPair.length < 2) {
-        // let arr = [];
-        // arr = arr.concat(cardPair);
-        // arr = arr.concat(cardInfo);
-        // this.setState({ cardPair: arr });
-        this.setState({ cardPair: [...cardPair, cardInfo] });
-      }
-      // this.checkPairs(cardPair);
+      this.setState(
+        { cardPair: [...cardPair, cardInfo] },
+        () => this.checkPairs(),
+      );
     }
   }
 
@@ -75,19 +82,36 @@ class Game extends Component {
     return rows;
   }
 
-  checkPairs = (cardPair, cardImg ) => {
+  checkPairs = () => {
+    const { cardPair, cardsRows } = this.state;
     if (cardPair.length === 2) {
-      if (cardPair[0].cardUrl === cardPair[1].cardUrl && cardPair[0].cardUrl === cardImg) {
-        return true;
+      if (cardPair[0].cardUrl === cardPair[1].cardUrl) {
+        const cleared = cardsRows.map(row => row.map(img => (img === cardPair[0].cardUrl ? null : img)));
+        setTimeout(() => {
+          this.setState(
+            { cardPair: [], cardsRows: cleared },
+            () => {
+              let gameStatus = true;
+              this.state.cardsRows.forEach((row) => {
+                row.forEach((item) => {
+                  if (item !== null) {
+                    gameStatus = false;
+                  }
+                });
+              });
+              this.setState({ gameStatus: gameStatus });
+            },
+          );
+        }, 1000);
+      } else {
+        setTimeout(() => { this.setState({ cardPair: [] }); }, 1000);
       }
     }
-    return false;
   }
 
   checkFlip = (cardPair, cardImg, cardId) => {
     for (let i = 0; i < cardPair.length; i++) {
       if (cardPair[i].cardUrl === cardImg && cardPair[i].cardId === cardId) {
-        // this.setState({ cardPair: [] });
         return true;
       }
     }
@@ -95,29 +119,30 @@ class Game extends Component {
   }
 
   render() {
-    const { currentShirtUrl } = this.props;
-    const { cardsRows, cardPair } = this.state;
-    // if (cardsLeft) {
-      return (
-        <div>
-          {cardsRows.map((cardImgs, cardRow) => (
-            <div className="cardsRow" key={this.rowKeys[cardRow]}>
-              {cardImgs.map((cardImg, cardPlace) => (
-                <Card
-                  id={`${cardRow}${cardPlace}`}
-                  key={`${this.rowKeys[cardRow] + cardRow + cardPlace}`}
-                  side={cardImg}
-                  shirt={currentShirtUrl}
-                  isFlip={this.checkFlip(cardPair, cardImg, `${cardRow}${cardPlace}`)}
-                  onFlip={this.handleFlip}
-                  condition={this.checkPairs(cardPair, cardImg)}
-                />))
-              }
-            </div>
-          ))}
-        </div>
-      );
-    // }
+    const { currentShirtUrl, userName } = this.props;
+    const { cardsRows, cardPair, gameStatus, time } = this.state;
+    // время не прокидывается
+    console.log(time);
+    return (
+      <div>
+        <Timer gameStatus={gameStatus} setPlayerTime={this.setTime} />
+        <ModalWindow gameStatus={gameStatus} gameTime={time} userName={userName} />
+        {cardsRows.map((cardImgs, cardRow) => (
+          <div className="cardsRow" key={this.rowKeys[cardRow]}>
+            {cardImgs.map((cardImg, cardPlace) => (
+              <Card
+                id={`${cardRow}${cardPlace}`}
+                key={`${this.rowKeys[cardRow] + cardRow + cardPlace}`}
+                side={cardImg}
+                shirt={currentShirtUrl}
+                isFlip={this.checkFlip(cardPair, cardImg, `${cardRow}${cardPlace}`)}
+                onFlip={this.handleFlip}
+              />))
+            }
+          </div>
+        ))}
+      </div>
+    );
   }
 }
 

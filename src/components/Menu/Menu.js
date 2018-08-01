@@ -83,6 +83,10 @@ class Menu extends Component {
         <Link to="/game">
           Start
         </Link>
+
+        <Link to="/score">
+          Score
+        </Link>
       </div>
     );
   }

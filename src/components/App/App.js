@@ -6,6 +6,7 @@ import { Route, Switch } from 'react-router-dom';
 import Login from '../Login';
 import Menu from '../Menu';
 import Game from '../Game';
+import Score from '../Score';
 
 import './App.scss';
 
@@ -19,8 +20,8 @@ export default class App extends Component {
             <Route exact path="/" component={Login} />
             <Route exact path="/menu" component={Menu} />
             <Route exact path="/game" component={Game} />
-            {/* <Route exact path="/score" component={Score} />
-            <Route exact path="/victory" component={Victory} /> */}
+            <Route exact path="/score" component={Score} />
+            {/* <Route exact path="/victory" component={Victory} /> */}
           </Switch>
         </main>
       </div>

@@ -1,0 +1,21 @@
+.score {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  width: 500px;
+  height: 500px;
+  border: solid  rgb(230, 78, 8);
+  background: rgb(184, 74, 74);
+}
+
+.score table{
+  border: solid black;
+}
+
+.score th{
+  border: solid black;
+}
+
+.score td{
+  border: solid black;
+}
